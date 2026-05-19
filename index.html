@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Huddle LMS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0B1F3B] text-white">
+
+<script>
+const LMS = { current:null };
+
+const modules = [
+  {id:'m1', level:'level1', title:'Level 1 — Mental Health Landscape', content:'Student-athletes face pressure, injury, identity strain, and burnout risk.'},
+  {id:'m2', level:'level1', title:'Level 1 — Burnout & Stress', content:'Burnout includes exhaustion, withdrawal, and low motivation.'},
+  {id:'m3', level:'level1', title:'Level 1 — ABC Action Plan', content:'Acknowledge, Bridge, Connect helps teammates support one another.'},
+
+  {id:'m4', level:'level2', title:'Level 2 — Listening Skills', content:'Peer leaders use active listening and boundaries.'},
+  {id:'m5', level:'level2', title:'Level 2 — Red Flags', content:'Watch for withdrawal, mood changes, and missed activities.'},
+
+  {id:'m6', level:'level3', title:'Level 3 — Instructor Skills', content:'Instructors facilitate training and build psychological safety.'},
+  {id:'m7', level:'level3', title:'Level 3 — Evaluation & Systems', content:'Instructors track data and improve program delivery.'}
+];
+
+function login(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  render();
+}
+
+function render(){
+  const c=document.getElementById('list');
+  c.innerHTML=modules.map(m=>`
+    <div class="p-4 bg-slate-800 rounded-xl">
+      <h3>${m.title}</h3>
+      <button onclick="openM('${m.id}')" class="bg-yellow-400 text-black px-3 py-1 mt-2 rounded">Open</button>
+    </div>
+  `).join('');
+}
+
+function filter(l){
+  document.querySelectorAll('.p-4').forEach(d=>{
+    if(l==='all'||d.innerText.includes(l.replace('level','Level '))) d.style.display='block';
+    else d.style.display='none';
+  });
+}
+
+function openM(id){
+  const m=modules.find(x=>x.id===id);
+  LMS.current=m;
+  document.getElementById('view').style.display='block';
+  document.getElementById('content').innerText=m.content;
+}
+
+</script>
+
+<div id="login" class="flex flex-col items-center justify-center h-screen">
+  <h1 class="text-3xl mb-4">The Huddle LMS</h1>
+  <button onclick="login()" class="bg-yellow-400 text-black px-4 py-2 rounded">Enter</button>
+</div>
+
+<div id="app" style="display:none" class="p-6">
+
+  <select onchange="filter(this.value)" class="text-black p-2 mb-4">
+    <option value="all">All</option>
+    <option value="level1">Level 1</option>
+    <option value="level2">Level 2</option>
+    <option value="level3">Level 3</option>
+  </select>
+
+  <div id="list" class="grid md:grid-cols-2 gap-4"></div>
+
+  <div id="view" style="display:none" class="mt-6 p-4 bg-slate-900 rounded">
+    <p id="content"></p>
+  </div>
+
+</div>
+
+</body>
+</html>
